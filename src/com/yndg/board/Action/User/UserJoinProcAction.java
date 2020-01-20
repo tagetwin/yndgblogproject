@@ -18,11 +18,11 @@ public class UserJoinProcAction implements Action {
 		if(
 				req.getParameter("username")== null ||
 				req.getParameter("password") == null ||
-				req.getParameter("email") == null ||
+//				req.getParameter("email") == null ||
 //				req.getParameter("address") == null ||
 				req.getParameter("username").equals("") ||
-				req.getParameter("password").equals("") ||
-				req.getParameter("email").equals("")
+				req.getParameter("password").equals("") 
+//				req.getParameter("email").equals("")
 //				req.getParameter("address").equals("")
 		) {
 			resp.sendRedirect("/");
@@ -32,17 +32,18 @@ public class UserJoinProcAction implements Action {
 //		1번
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-		String email = req.getParameter("email");
+//		String email = req.getParameter("email");
 //		String address = req.getParameter("address");
 		
 		System.out.println("username: " + username);
 		System.out.println("password: " + password);
-		System.out.println("email: " + email);
+//		System.out.println("email: " + email);
 //		System.out.println("address: " + address);
 
 		UserDao userDao = UserDao.getInstance();
 //		int result = userDao.save(username, password, email, address);
-		int result = userDao.save(username, password, email);
+//		int result = userDao.save(username, password, email);
+		int result = userDao.save(username, password);
 		
 		if (result == 1) {
 			System.out.println("가입성공");

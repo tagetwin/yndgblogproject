@@ -27,16 +27,16 @@ public class BoardDao {
 		return instance;
 	}
 
-	public int save(String title, String content, int userId) {
+	public int save(String boardTitle, String content, int userId) {
 		// 1. Stream 연결
 		Connection conn = DBUtil.getConnection();
 		PreparedStatement pstmt = null;
 		try {
 			// 2. 쿼리 전송 클래스 (규약에 맞게)
-			final String SQL = "INSERT INTO board (title, content, userId, createTime) VALUES (?, ?, ?, date_format(now(), '%Y-%m-%d %k:%i'))";
+			final String SQL = "INSERT INTO board (boardTitle, content, userId, createTime) VALUES (?, ?, ?, date_format(now(), '%Y-%m-%d %k:%i'))";
 			pstmt = conn.prepareStatement(SQL);
 			// 3. SQL문 완성하기
-			pstmt.setString(1, title);
+			pstmt.setString(1, boardTitle);
 			pstmt.setString(2, content);
 			pstmt.setInt(3, userId);
 			// 4. SQL문 전송하기
@@ -58,16 +58,16 @@ public class BoardDao {
 		return -1;
 	}
 
-	public int update(String title, String content, int id) {
+	public int update(String boardTitle, String content, int id) {
 		// 1. Stream 연결
 		Connection conn = DBUtil.getConnection();
 		PreparedStatement pstmt = null;
 		try {
 			// 2. 쿼리 전송 클래스 (규약에 맞게)
-			final String SQL = "UPDATE board SET title = ?, content = ? WHERE id = ?";
+			final String SQL = "UPDATE board SET boardTitle = ?, content = ? WHERE id = ?";
 			pstmt = conn.prepareStatement(SQL);
 			// 3. SQL문 완성하기
-			pstmt.setString(1, title);
+			pstmt.setString(1, boardTitle);
 			pstmt.setString(2, content);
 			pstmt.setInt(3, id);
 
@@ -127,9 +127,6 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			// 2. 쿼리 전송 클래스 (규약에 맞게)
-//			final String SQL = "SELECT id, title, content, userId, date_format(createtime, '%Y-%m-%d %k:%i') createTime FROM board";
-//			final String SQL = "select id, title, content, userId, left(createtime, 16) createTime from board";
 			final String SQL = "SELECT * FROM board ORDER BY id DESC";
 			pstmt = conn.prepareStatement(SQL);
 			// 3. SQL문 완성하기
@@ -138,17 +135,14 @@ public class BoardDao {
 
 			while (rs.next()) {
 				int id = rs.getInt("id");
-				String title = rs.getString("title");
+				String boardTitle = rs.getString("boardTitle");
 				String content = rs.getString("content");
 				int userId = rs.getInt("userId");
 				Timestamp createTime = rs.getTimestamp("createTime");
 				
-//				String s = new SimpleDateFormat("yyyy/MM/dd HH:mm").format(createTime);
-//				System.out.println(s);
-//				System.out.println(s instanceof String);
-
 				Board board = Board.builder()
-						.id(id).title(title)
+						.id(id)
+						.boardTitle(boardTitle)
 						.content(content)
 						.userId(userId)
 						.createTime(createTime)
@@ -179,7 +173,7 @@ public class BoardDao {
 		ResultSet rs = null;
 		try {
 			StringBuffer sb = new StringBuffer();
-			sb.append("SELECT b.id, b.title, b.content, b.createTime, b.userId, u.username");
+			sb.append("SELECT b.id, b.boardTitle, b.content, b.createTime, b.userId, u.username");
 			sb.append(" FROM board b inner join user u");
 			sb.append(" ON b.userid = u.id");
 			sb.append(" WHERE b.id =?"); // 세미콜론 절대 금지, 끝에 띄어쓰기
@@ -194,7 +188,7 @@ public class BoardDao {
 
 			BoardUserVM buVM = null;
 			if (rs.next()) {
-				String title = rs.getString("b.title");
+				String boardTitle = rs.getString("b.boardTitle");
 				String content = rs.getString("b.content");
 				Timestamp createTime = rs.getTimestamp("b.createTime");
 				int userId = rs.getInt("b.userId");
@@ -202,7 +196,8 @@ public class BoardDao {
 
 				// Board Builder
 				Board board = Board.builder()
-						.id(id).title(title)
+						.id(id)
+						.boardTitle(boardTitle)
 						.content(content)
 						.userId(userId)
 						.createTime(createTime)

@@ -2,7 +2,6 @@ package com.yndg.board.Model;
 
 import java.sql.Timestamp;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 
-public class Board {
+public class Game {
 	private int id;
-	private String boardTitle;
-	private String content;
+	private String gameTitle;
+	private String genre;
+	private String publisher;
+	private Timestamp publishDate;
 	private int userId;
-	private Timestamp createTime;
+	private int price;
 }

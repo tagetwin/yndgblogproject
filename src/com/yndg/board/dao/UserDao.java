@@ -24,18 +24,18 @@ public class UserDao {
 		return instance;
 	}
 	
-	public int save(String username, String password, String email) {
+	public int save(String username, String password) {
 		// 1. Stream 연결
 		Connection conn = DBUtil.getConnection();
 		PreparedStatement pstmt = null;
 		try {
 			// 2. 쿼리 전송 클래스 (규약에 맞게)
-			final String SQL = "INSERT INTO user (username, password, email, createTime) VALUES (?, ?, ?, now())";
+			final String SQL = "INSERT INTO user (username, password, createTime) VALUES (?, ?, now())";
 			pstmt = conn.prepareStatement(SQL);
 			// 3. SQL문 완성하기
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
-			pstmt.setString(3, email);
+//			pstmt.setString(3, email);
 //			pstmt.setString(4, address);
 			// 4. SQL문 전송하기
 			//pstmt.executeQuery();
